@@ -1,0 +1,22 @@
+# Versteckte Dateien & Umgebungsvariablen
+.DS_Store
+
+# Node.js Abhängigkeiten & Build-Dateien
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Docker-Dateien
+Dockerfile
+.dockerignore
+
+# Lokale Logs & Cache
+logs
+*.log
+.cache
+
+# Git & IDE-Dateien
+.git
+.gitignore
+.vscode
+.idea

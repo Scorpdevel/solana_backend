@@ -77,7 +77,7 @@ async function checkTokenPrices() {
     console.log(config)
 
     for (const tokenMint in state.portfolio) {
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         const tokenData = state.portfolio[tokenMint];
         const currentPrice = await getTokenPrice(tokenMint);
 
@@ -149,8 +149,8 @@ function evaluateBotResponse() {
     const validCount = filteredEntries.filter(([, entry]) => entry?.valid === true).length;
 
     // Prüfen, ob mindestens 7 Kriterien erfüllt sind
-    return true
-   // return validCount >= 9;
+    //return true
+    return validCount >= 9;
 }
 
 async function loadBalanceFromDB() {

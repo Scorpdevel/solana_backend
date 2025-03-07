@@ -218,7 +218,7 @@ async function sendTelegramMessage(tokenMint) {
 
         if(i === 0){
             state.botResponses['price'] =  getTokenPrice(response);
-            state.botResponses['marketCap'] =  getMarketCap(response);
+            //state.botResponses['marketCap'] =  getMarketCap(response);
         }
 
         if(i === 1){
@@ -290,7 +290,7 @@ async function subscribe() {
                     console.log("❌ Ungültiger Token, wird ignoriert.");
                     return;
                 }
-                await new Promise((resolve) => setTimeout(resolve, 15000))
+                await new Promise((resolve) => setTimeout(resolve, 10000))
                 await sendTelegramMessage(token_mint);
             }
 
