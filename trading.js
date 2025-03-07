@@ -150,7 +150,7 @@ function evaluateBotResponse() {
 
     // Prüfen, ob mindestens 7 Kriterien erfüllt sind
     //return true
-    return validCount >= 9;
+    return validCount >= 8;
 }
 
 async function loadBalanceFromDB() {
