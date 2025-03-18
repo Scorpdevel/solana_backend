@@ -36,7 +36,7 @@ function getDevPercentage(response){
         let devHoldPercentage = parseFloat(devHoldsMatch[1]);
 
        return {
-           valid: devHoldPercentage <= 8,
+           valid: devHoldPercentage >= 10,
            amount: devHoldPercentage
        }
     }
@@ -100,7 +100,7 @@ function bundledTradesMatch(response){
     if (bundledTradesMatch) {
         let bundledPercentage = parseFloat(bundledTradesMatch[1]);
         return {
-            valid: bundledPercentage <= 30,
+            valid: bundledPercentage <= 45,
             amount: bundledPercentage
         };
     }
@@ -116,7 +116,7 @@ function getDevCreatedTokens(response) {
     if (devCreatedMatch) {
         let count = parseInt(devCreatedMatch[1], 10);
         return {
-            valid: count <= 1,
+            valid: count >= 5,
             amount: count
         };
     }

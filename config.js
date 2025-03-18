@@ -1,6 +1,6 @@
 const config = {
     // 💰 Startkapital in SOL
-    initialSolBalance: 100.0,
+    initialSolBalance: 10000.0,
 
     // 💲 Wie viel wird pro Trade investiert (in USD)
     tradeAmountUSD: 13,

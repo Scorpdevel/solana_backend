@@ -19,7 +19,6 @@ let mtproto = null;
 
 // 🔹 Funktion zum Telegram-Login
 async function login() {
-    await loadBalanceFromDB()
     if (fs.existsSync("./mtproto-session.json")) {
         console.log("🔄 Vorhandene Session gefunden. Login wird übersprungen!");
         mtproto = new MTProto({
@@ -223,9 +222,9 @@ async function sendTelegramMessage(tokenMint) {
 
         if(i === 1){
             state.botResponses['devPercentage'] =  getDevPercentage(response);
-            state.botResponses['sameWebsite'] =  sameWebsiteMatch(response)
-            state.botResponses['twitterMatches'] =  sameTwitterMatch(response)
-            state.botResponses['telegramMatches'] = sameTelegramMatch(response)
+            //state.botResponses['sameWebsite'] =  sameWebsiteMatch(response)
+            //state.botResponses['twitterMatches'] =  sameTwitterMatch(response)
+            //state.botResponses['telegramMatches'] = sameTelegramMatch(response)
             state.botResponses['bundles'] = bundledTradesMatch(response)
             state.botResponses['sameName'] = sameNameMatch(response)
             state.botResponses['devCreatedTokens'] = getDevCreatedTokens(response)
