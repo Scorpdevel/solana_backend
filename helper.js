@@ -116,7 +116,7 @@ function getDevCreatedTokens(response) {
     if (devCreatedMatch) {
         let count = parseInt(devCreatedMatch[1], 10);
         return {
-            valid: count >= 5,
+            valid: count >= 5 && count <= 500,
             amount: count
         };
     }
