@@ -36,7 +36,7 @@ function getDevPercentage(response){
         let devHoldPercentage = parseFloat(devHoldsMatch[1]);
 
        return {
-           valid: devHoldPercentage >= 10,
+           valid: devHoldPercentage <= 10,
            amount: devHoldPercentage
        }
     }
@@ -116,7 +116,7 @@ function getDevCreatedTokens(response) {
     if (devCreatedMatch) {
         let count = parseInt(devCreatedMatch[1], 10);
         return {
-            valid: count >= 5 && count <= 500,
+            valid: count <= 500 && count >= 5,
             amount: count
         };
     }
