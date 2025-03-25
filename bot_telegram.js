@@ -4,7 +4,9 @@ const WebSocket = require("ws");
 const readlineSync = require("readline-sync");
 const { evaluateBotResponse, buyToken, loadBalanceFromDB} = require("./trading");
 const { state, resetState } = require("./state");
-const { getMarketCap, getTokenPrice, sameNameMatch, getDevPercentage, bundledTradesMatch, getDevCreatedTokens, sameTelegramMatch, sameTwitterMatch, sameWebsiteMatch, getT10HolderPercentage} = require("./helper");
+const { getMarketCap, getTokenPrice, sameNameMatch, getDevPercentage, bundledTradesMatch, getDevCreatedTokens, sameTelegramMatch, sameTwitterMatch, sameWebsiteMatch, getT10HolderPercentage,
+    getMarketCapValue
+} = require("./helper");
 const fs = require("fs");
 
 // 🔹 Lade API-Daten aus .env
@@ -201,51 +203,63 @@ async function sendTelegramMessage(tokenMint) {
         { name: bot_username_rick, command: `/x ${tokenMint}` },
 
      */
+    console.log('30 sekunden werden gewartet um die erste marketcap zu erhalten')
+    await new Promise((resolve) => setTimeout(resolve, 30000))
 
-    for (let i = 0; i < bots.length; i++) {
-        const bot = bots[i];
+    console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
+    await sendMessage(bots[0].name, bots[0].command);
+    let response = await waitForBotResponse(bots[0].name);
 
-        console.log(`📤 Sende Nachricht an ${bot.name}: ${bot.command}`);
-        await sendMessage(bot.name, bot.command);
-
-        const response = await waitForBotResponse(bot.name);
-
-        if (!response) {
-            console.warn(`⚠️ Keine Antwort von ${bot.name}. Token wird ignoriert.`);
-            return;
-        }
-
-        if(i === 0){
-            state.botResponses['price'] =  getTokenPrice(response);
-            //state.botResponses['marketCap'] =  getMarketCap(response);
-        }
-
-        if(i === 1){
-            state.botResponses['devPercentage'] =  getDevPercentage(response);
-            //state.botResponses['sameWebsite'] =  sameWebsiteMatch(response)
-            //state.botResponses['twitterMatches'] =  sameTwitterMatch(response)
-            //state.botResponses['telegramMatches'] = sameTelegramMatch(response)
-            state.botResponses['bundles'] = bundledTradesMatch(response)
-            state.botResponses['sameName'] = sameNameMatch(response)
-            state.botResponses['devCreatedTokens'] = getDevCreatedTokens(response)
-            state.botResponses['t10HolderPercentage'] = getT10HolderPercentage(response)
-        }
-
-
-        // ⏳ Warte **2 Sekunden**, bevor der nächste Bot angeschrieben wird
-        if (i < bots.length - 1) {
-            console.log("⏳ Warte 2 Sekunden, bevor der nächste Bot angeschrieben wird...");
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-        }
+    if (!response) {
+        console.warn(`⚠️ Keine Antwort von ${bots[0].name}. Token wird ignoriert.`);
+        return;
     }
 
-    if (evaluateBotResponse()) {
-        console.log("💰 **SIMULIERTER KAUF** wird durchgeführt!");
-        console.log("💰 Token wird gekauft!");
-        // Kaufprozess kann hier eingefügt werden
-        await buyToken(tokenMint);
+    const marketCapAfter30Sec = getMarketCapValue(response);
 
-    } else {
+    console.log(`Erhaltene Marketcap nach 30sec: ${marketCapAfter30Sec}`)
+
+    console.log('45 sekunden werden gewartet um den zweiten Marketcap zu erhalten')
+    await new Promise((resolve) => setTimeout(resolve, 45000))
+
+    console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
+    await sendMessage(bots[0].name, bots[0].command);
+    response = await waitForBotResponse(bots[0].name);
+
+    if (!response) {
+        console.warn(`⚠️ Keine Antwort von ${bots[0].name}. Token wird ignoriert.`);
+        return;
+    }
+
+    const marketCapAfter45Sec = getMarketCapValue(response);
+    console.log(`Erhaltene Marketcap nach 45sec: ${marketCapAfter45Sec}`)
+    const marketCapChanges = marketCapAfter45Sec / marketCapAfter30Sec
+
+    if(marketCapChanges >= 1.5){
+        state.botResponses['price'] =  getTokenPrice(response);
+        console.log(`📤 Sende Nachricht an ${bots[1].name}: ${bots[1].command}`);
+        await sendMessage(bots[1].name, bots[1].command);
+        const response = await waitForBotResponse(bots[1].name);
+
+        state.botResponses['devPercentage'] =  getDevPercentage(response);
+        //state.botResponses['sameWebsite'] =  sameWebsiteMatch(response)
+        //state.botResponses['twitterMatches'] =  sameTwitterMatch(response)
+        //state.botResponses['telegramMatches'] = sameTelegramMatch(response)
+        state.botResponses['bundles'] = bundledTradesMatch(response)
+        state.botResponses['sameName'] = sameNameMatch(response)
+        state.botResponses['devCreatedTokens'] = getDevCreatedTokens(response)
+        state.botResponses['t10HolderPercentage'] = getT10HolderPercentage(response)
+
+        if (evaluateBotResponse()) {
+            console.log("💰 **SIMULIERTER KAUF** wird durchgeführt!");
+            console.log("💰 Token wird gekauft!");
+            // Kaufprozess kann hier eingefügt werden
+            await buyToken(tokenMint);
+
+        } else {
+            console.log("⛔ Token wird nicht gekauft.");
+        }
+    }else{
         console.log("⛔ Token wird nicht gekauft.");
     }
 }
@@ -289,7 +303,7 @@ async function subscribe() {
                     console.log("❌ Ungültiger Token, wird ignoriert.");
                     return;
                 }
-                await new Promise((resolve) => setTimeout(resolve, 10000))
+                //await new Promise((resolve) => setTimeout(resolve, 10000))
                 await sendTelegramMessage(token_mint);
             }
 

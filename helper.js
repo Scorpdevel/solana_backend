@@ -8,6 +8,21 @@ function getTokenPrice(response){
     return undefined
 }
 
+function getMarketCapValue(response){
+    const marketCapMatch = response.receivedMessage.match(/Market Cap: \$(\d+(\.\d+)?K?)/);
+    if (marketCapMatch) {
+        let marketCap = marketCapMatch[1];
+        if (marketCap.includes("K")) {
+            marketCap = parseFloat(marketCap) * 1000; // Falls 'K' vorhanden ist, in vollständige Zahl umrechnen
+        } else {
+            marketCap = parseFloat(marketCap);
+        }
+
+        return marketCap;
+    }
+
+    return 0;
+}
 function getMarketCap(response){
     const marketCapMatch = response.receivedMessage.match(/Market Cap: \$(\d+(\.\d+)?K?)/);
     if (marketCapMatch) {
@@ -116,7 +131,7 @@ function getDevCreatedTokens(response) {
     if (devCreatedMatch) {
         let count = parseInt(devCreatedMatch[1], 10);
         return {
-            valid: count <= 500 && count >= 5,
+            valid:  count >= 5,
             amount: count
         };
     }
@@ -161,4 +176,4 @@ function getT10HolderPercentage(response) {
     };
 }
 
-module.exports = { getTokenPrice, getMarketCap,  getDevPercentage, sameWebsiteMatch, sameTelegramMatch, sameTwitterMatch, bundledTradesMatch, sameNameMatch, getDevCreatedTokens, getT10HolderPercentage };
+module.exports = { getTokenPrice, getMarketCap,  getDevPercentage, sameWebsiteMatch, sameTelegramMatch, sameTwitterMatch, bundledTradesMatch, sameNameMatch, getDevCreatedTokens, getT10HolderPercentage, getMarketCapValue };
