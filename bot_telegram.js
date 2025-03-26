@@ -203,8 +203,8 @@ async function sendTelegramMessage(tokenMint) {
         { name: bot_username_rick, command: `/x ${tokenMint}` },
 
      */
-    console.log('30 sekunden werden gewartet um die erste marketcap zu erhalten')
-    await new Promise((resolve) => setTimeout(resolve, 30000))
+    console.log('60 sekunden werden gewartet um die erste marketcap zu erhalten')
+    await new Promise((resolve) => setTimeout(resolve, 60000))
 
     console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
     await sendMessage(bots[0].name, bots[0].command);
@@ -219,8 +219,8 @@ async function sendTelegramMessage(tokenMint) {
 
     console.log(`Erhaltene Marketcap nach 30sec: ${marketCapAfter30Sec}`)
 
-    console.log('45 sekunden werden gewartet um den zweiten Marketcap zu erhalten')
-    await new Promise((resolve) => setTimeout(resolve, 45000))
+    console.log('60 sekunden werden gewartet um den zweiten Marketcap zu erhalten')
+    await new Promise((resolve) => setTimeout(resolve, 60000))
 
     console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
     await sendMessage(bots[0].name, bots[0].command);
