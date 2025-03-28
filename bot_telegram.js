@@ -211,8 +211,8 @@ async function sendTelegramMessage(tokenMint) {
     if (evaluateBotResponse()) {
         console.log(state)
 
-        console.log('15 sekunden werden gewartet um die erste marketcap zu erhalten')
-        await new Promise((resolve) => setTimeout(resolve, 15000))
+        console.log('30 sekunden werden gewartet um die erste marketcap zu erhalten')
+        await new Promise((resolve) => setTimeout(resolve, 30000))
 
         console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
         await sendMessage(bots[0].name, bots[0].command);
@@ -225,10 +225,10 @@ async function sendTelegramMessage(tokenMint) {
 
         const marketCapFirst = getMarketCapValue(response);
 
-        console.log(`Erhaltene Marketcap nach 15sec: ${marketCapFirst}`)
+        console.log(`Erhaltene Marketcap nach 30sec: ${marketCapFirst}`)
 
-        console.log('15 sekunden werden gewartet um den zweiten Marketcap zu erhalten')
-        await new Promise((resolve) => setTimeout(resolve, 15000))
+        console.log('50 sekunden werden gewartet um den zweiten Marketcap zu erhalten')
+        await new Promise((resolve) => setTimeout(resolve, 50000))
 
         console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
         await sendMessage(bots[0].name, bots[0].command);
@@ -240,7 +240,7 @@ async function sendTelegramMessage(tokenMint) {
         }
 
         const marketCapSecond = getMarketCapValue(response);
-        console.log(`Erhaltene Marketcap nach 45sec: ${marketCapSecond}`)
+        console.log(`Erhaltene Marketcap nach 50sec: ${marketCapSecond}`)
         const marketCapChanges = marketCapSecond / marketCapFirst
         if(marketCapChanges >= 1.25){
             console.log('erhaltene defi percentage: ', marketCapChanges)
