@@ -46,7 +46,7 @@ function getMarketCap(response){
 }
 
 function getDevPercentage(response){
-    const devHoldsMatch = response.receivedMessage.match(/Dev bought .* or (\d+(\.\d+)?)%/);
+    const devHoldsMatch = response.receivedMessage.match(/Dev bought .* \((\d+(\.\d+)?)% of curve\)/);
     if (devHoldsMatch) {
         let devHoldPercentage = parseFloat(devHoldsMatch[1]);
 
@@ -111,11 +111,11 @@ function sameTwitterMatch(response){
 
 
 function bundledTradesMatch(response){
-    const bundledTradesMatch = response.receivedMessage.match(/Bundled! .* (\d+(\.\d+)?)%/);
+    const bundledTradesMatch = response.receivedMessage.match(/Bundled! .* \((\d+(\.\d+)?)% of curve\)/);
     if (bundledTradesMatch) {
         let bundledPercentage = parseFloat(bundledTradesMatch[1]);
         return {
-            valid: bundledPercentage <= 45,
+            valid: bundledPercentage <= 35,
             amount: bundledPercentage
         };
     }
@@ -159,6 +159,22 @@ function sameNameMatch(response) {
     };
 }
 
+function getTraders(response){
+    const tradersMatch = response.receivedMessage.match(/👥 Traders: (\d+)/);
+    if (tradersMatch) {
+        let count = parseInt(tradersMatch[1], 10);
+        return {
+            valid: count >= 12,
+            amount: count
+        };
+    }
+
+    return {
+        valid: true,
+        amount: null
+    };
+}
+
 function getT10HolderPercentage(response) {
     const t10Match = response.receivedMessage.match(/T10 (\d+(\.\d+)?)%/);
     if (t10Match) {
@@ -176,4 +192,4 @@ function getT10HolderPercentage(response) {
     };
 }
 
-module.exports = { getTokenPrice, getMarketCap,  getDevPercentage, sameWebsiteMatch, sameTelegramMatch, sameTwitterMatch, bundledTradesMatch, sameNameMatch, getDevCreatedTokens, getT10HolderPercentage, getMarketCapValue };
+module.exports = { getTokenPrice, getMarketCap,  getDevPercentage, sameWebsiteMatch, sameTelegramMatch, sameTwitterMatch, bundledTradesMatch, sameNameMatch, getDevCreatedTokens, getT10HolderPercentage, getMarketCapValue, getTraders };

@@ -111,7 +111,7 @@ function evaluateBotResponse() {
 
     // Prüfen, ob mindestens 5 Kriterien erfüllt sind
     //return true
-    return validCount >= 5;
+    return validCount >= 4;
 }
 
 
