@@ -198,7 +198,7 @@ async function sendTelegramMessage(tokenMint) {
         { name: bot_username_zbot, command: tokenMint },
        // { name: bot_username_zbot, command: `/bundle ${tokenMint}` }
     ];
-    await new Promise((resolve) => setTimeout(resolve, 10000))
+    await new Promise((resolve) => setTimeout(resolve, 5000))
     console.log(`📤 Sende Nachricht an ${bots[1].name}: ${bots[1].command}`);
     await sendMessage(bots[1].name, bots[1].command);
     const response = await waitForBotResponse(bots[1].name);
@@ -209,7 +209,10 @@ async function sendTelegramMessage(tokenMint) {
     state.botResponses['sameName'] = sameNameMatch(response)
 
     if (evaluateBotResponse()) {
-        console.log(state)
+        console.log("💰 **SIMULIERTER KAUF** wird durchgeführt!");
+        console.log("💰 Token wird gekauft!");
+        await buyToken(tokenMint);
+    /*    console.log(state)
 
         console.log('30 sekunden werden gewartet um die erste marketcap zu erhalten')
         await new Promise((resolve) => setTimeout(resolve, 30000))
@@ -251,7 +254,7 @@ async function sendTelegramMessage(tokenMint) {
         }else{
             console.log("⛔ Token wird nicht gekauft.");
             console.log('Erhaltene defi percentage: ', marketCapChanges)
-        }
+        }*/
     } else {
         console.log(state)
         console.log("⛔ Token wird nicht gekauft.");
