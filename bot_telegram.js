@@ -209,6 +209,10 @@ async function sendTelegramMessage(tokenMint) {
     state.botResponses['sameName'] = sameNameMatch(response)
 
     if (evaluateBotResponse()) {
+        console.log(`📤 Sende Nachricht an ${bots[0].name}: ${bots[0].command}`);
+        await sendMessage(bots[0].name, bots[0].command);
+        const responsePrice = await waitForBotResponse(bots[0].name);
+        state.botResponses['price'] =  getTokenPrice(responsePrice);
         console.log("💰 **SIMULIERTER KAUF** wird durchgeführt!");
         console.log("💰 Token wird gekauft!");
         await buyToken(tokenMint);
